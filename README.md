@@ -1,10 +1,8 @@
-# enforce-qcloud-internal-lb
-
-自动强制为 腾讯云 TKE 集群 Loadbalancer 类型的 Service 切换为内网类型的负载均衡
+# template-autoops-admission
 
 ## 使用方式
 
-* 初始化 `admission-bootstrapper` 
+* 初始化 `admission-bootstrapper`
   参照此文档 https://github.com/k8s-autoops/admission-bootstrapper ，完成 `admission-bootstrapper` 的初始化步骤
 * 部署以下 YAML
 
@@ -13,38 +11,38 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: enforce-qcloud-internal-lb
+  name: template-autoops-admission
   namespace: autoops
 ---
 # create clusterrole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: enforce-qcloud-internal-lb
+  name: template-autoops-admission
 rules:
-  - apiGroups: [""]
-    resources: ["namespaces"]
-    verbs: ["get"]
+  - apiGroups: [ "" ]
+    resources: [ "namespaces" ]
+    verbs: [ "get" ]
 ---
 # create clusterrolebinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: enforce-qcloud-internal-lb
+  name: template-autoops-admission
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: enforce-qcloud-internal-lb
+  name: template-autoops-admission
 subjects:
   - kind: ServiceAccount
-    name: enforce-qcloud-internal-lb
+    name: template-autoops-admission
     namespace: autoops
 ---
 # create job
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: install-enforce-qcloud-internal-lb
+  name: install-template-autoops-admission
   namespace: autoops
 spec:
   template:
@@ -55,13 +53,13 @@ spec:
           image: autoops/admission-bootstrapper
           env:
             - name: ADMISSION_NAME
-              value: enforce-qcloud-internal-lb
+              value: template-autoops-admission
             - name: ADMISSION_IMAGE
-              value: autoops/enforce-qcloud-internal-lb
+              value: autoops/template-autoops-admission
             - name: ADMISSION_ENVS
               value: ""
             - name: ADMISSION_SERVICE_ACCOUNT
-              value: "enforce-qcloud-internal-lb"
+              value: "template-autoops-admission"
             - name: ADMISSION_MUTATING
               value: "true"
             - name: ADMISSION_IGNORE_FAILURE
@@ -72,13 +70,6 @@ spec:
               value: '[{"operations":["CREATE"],"apiGroups":[""], "apiVersions":["*"], "resources":["services"]}]'
       restartPolicy: OnFailure
 ```
-
-* 为需要启用的命名空间，添加注解，指明要使用的内网
-
-  * 指定子网 `autoops.enforce-qcloud-internal-lb/subnet=subnet-xxxxxx`
-  * 开启直连 `autoops.enforce-qcloud-internal-lb/direct=true`
-  
-  **可以配合 `enforce-ns-annotations` 自动为新命名空间启用此注解**
 
 ## Credits
 
