@@ -34,7 +34,7 @@ func main() {
 	s := &http.Server{
 		Addr: ":443",
 		Handler: autoops.NewMutatingAdmissionHTTPHandler(
-			func(ctx context.Context, request *admissionv1.AdmissionRequest, patches *[]map[string]interface{}) (err error) {
+			func(ctx context.Context, request *admissionv1.AdmissionRequest, patches *[]map[string]interface{}) (deny string, err error) {
 				_ = client
 				return
 			},

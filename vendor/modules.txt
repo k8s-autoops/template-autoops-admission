@@ -17,7 +17,7 @@ github.com/googleapis/gnostic/compiler
 github.com/googleapis/gnostic/extensions
 # github.com/json-iterator/go v1.1.8
 github.com/json-iterator/go
-# github.com/k8s-autoops/autoops v1.0.8
+# github.com/k8s-autoops/autoops v1.0.9
 ## explicit
 github.com/k8s-autoops/autoops
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
@@ -102,7 +102,6 @@ k8s.io/api/storage/v1
 k8s.io/api/storage/v1alpha1
 k8s.io/api/storage/v1beta1
 # k8s.io/apimachinery v0.18.9
-## explicit
 k8s.io/apimachinery/pkg/api/errors
 k8s.io/apimachinery/pkg/api/meta
 k8s.io/apimachinery/pkg/api/resource
